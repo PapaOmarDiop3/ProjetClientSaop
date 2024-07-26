@@ -1,0 +1,12 @@
+package serveur;
+
+import javax.xml.ws.Endpoint;
+import serveur.Etudiant_Service;
+
+public class Etudiant_Serveur {
+    public static void main(String[] args) {
+        String address = "http://127.0.0.1:8081/Etudiant_Service"; // Changez le port ici
+        Endpoint.publish(address, new Etudiant_Service());
+        System.out.println("Server started at: " + address);
+    }
+}

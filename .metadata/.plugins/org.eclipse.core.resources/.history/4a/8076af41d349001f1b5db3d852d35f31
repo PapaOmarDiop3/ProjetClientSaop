@@ -1,0 +1,15 @@
+package serveur;
+
+import javax.xml.ws.Endpoint;
+
+public class Enseignant_Serveur {
+    public static void main(String[] args) {
+        try {
+            String address = "http://localhost:8082/EnseignantService";
+            Endpoint.publish(address, new Enseignant_Service());
+            System.out.println("Service publié à l'adresse: " + address);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

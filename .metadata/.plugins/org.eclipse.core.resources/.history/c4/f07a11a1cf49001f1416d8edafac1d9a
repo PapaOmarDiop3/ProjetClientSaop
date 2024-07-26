@@ -1,0 +1,81 @@
+package serveur;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
+
+@WebService(serviceName="Enseignant_Service")
+public class Enseignant_Service {
+
+    private static final List<Enseignant> enseignants = new ArrayList<>();
+
+    // Ajouter un enseignant
+    @WebMethod
+    public Enseignant ajouter_Enseignant(@WebParam(name="matricule") String matricule,
+                                         @WebParam(name="nom") String nom,
+                                         @WebParam(name="prenom") String prenom,
+                                         @WebParam(name="grade") String grade,
+                                         @WebParam(name="departement") String departement) {
+        Enseignant enseignant = new Enseignant();
+        enseignant.setMatricule(matricule);
+        enseignant.setNom(nom);
+        enseignant.setPrenom(prenom);
+        enseignant.setGrade(grade);
+        enseignant.setDepartement(departement);
+        enseignants.add(enseignant);
+        return enseignant;
+    }
+
+    // Lister tous les enseignants
+    @WebMethod
+    public List<Enseignant> lister_Enseignant() {
+        return enseignants;
+    }
+
+    // Rechercher un enseignant
+    @WebMethod
+    public Enseignant rechercher_Enseignant(@WebParam(name="matricule") String matricule) {
+        for (Enseignant e : enseignants) {
+            if (e.getMatricule().equals(matricule)) {
+                return e; // Retourne l'enseignant trouvé
+            }
+        }
+        return null; // Aucun enseignant trouvé
+    }
+
+    // Modifier un enseignant
+    @WebMethod
+    public Enseignant modifier_Enseignant(@WebParam(name="matricule") String matricule,
+                                           @WebParam(name="nom") String nom,
+                                           @WebParam(name="prenom") String prenom,
+                                           @WebParam(name="grade") String grade,
+                                           @WebParam(name="departement") String departement) {
+        for (Enseignant e : enseignants) {
+            if (e.getMatricule().equals(matricule)) {
+                e.setNom(nom);
+                e.setPrenom(prenom);
+                e.setGrade(grade);
+                e.setDepartement(departement);
+                return e; // Retourne l'enseignant modifié
+            }
+        }
+        return null; // Aucun enseignant trouvé
+    }
+
+    // Supprimer un enseignant
+    @WebMethod
+    public String supprimer_Enseignant(@WebParam(name="matricule") String matricule) {
+        Iterator<Enseignant> iterator = enseignants.iterator();
+        while (iterator.hasNext()) {
+            Enseignant e = iterator.next();
+            if (e.getMatricule().equals(matricule)) {
+                iterator.remove();
+                return "Enseignant supprimé avec succès"; // Retourne un message de succès
+            }
+        }
+        return "Enseignant non trouvé"; // Aucun enseignant trouvé
+    }
+}

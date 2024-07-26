@@ -1,0 +1,74 @@
+package serveur;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
+
+@WebService(serviceName="Etudiant_Service")
+public class Etudiant_Service {
+
+    private static final List<Etudiant> etudiants = new ArrayList<>();
+
+    // Ajouter un étudiant
+    @WebMethod
+    public Etudiant ajouter_Etudiant(@WebParam(name="matricule") String matricule,
+                                     @WebParam(name="nom") String nom,
+                                     @WebParam(name="prenom") String prenom,
+                                     @WebParam(name="filiere") String filiere) {
+        Etudiant etudiant = new Etudiant();
+        etudiant.setMatricule(matricule);
+        etudiant.setNom(nom);
+        etudiant.setPrenom(prenom);
+        etudiant.setFiliere(filiere);
+        etudiants.add(etudiant);
+        return etudiant;
+    }
+
+    // Lister tous les étudiants
+    @WebMethod
+    public List<Etudiant> lister_Etudiant() {
+        return etudiants;
+    }
+
+    // Rechercher un étudiant
+    @WebMethod
+    public Etudiant rechercher_Etudiant(@WebParam(name="matricule") String matricule) {
+        for (Etudiant e : etudiants) {
+            if (e.getMatricule().equals(matricule)) {
+                return e; // Retourne l'étudiant trouvé
+            }
+        }
+        return null; // Aucun étudiant trouvé
+    }
+
+    // Modifier un étudiant
+    @WebMethod
+    public Etudiant modifier_Etudiant(@WebParam(name="matricule") String matricule,
+                                      @WebParam(name="nom") String nom,
+                                      @WebParam(name="prenom") String prenom,
+                                      @WebParam(name="filiere") String filiere) {
+        for (Etudiant e : etudiants) {
+            if (e.getMatricule().equals(matricule)) {
+                e.setNom(nom);
+                e.setPrenom(prenom);
+                e.setFiliere(filiere);
+                return e; // Retourne l'étudiant modifié
+            }
+        }
+        return null; // Aucun étudiant trouvé
+    }
+
+    // Supprimer un étudiant
+    @WebMethod
+    public String supprimer_Etudiant(@WebParam(name="matricule") String matricule) {
+        for (Etudiant e : etudiants) {
+            if (e.getMatricule().equals(matricule)) {
+                etudiants.remove(e);
+                return matricule; // Retourne le matricule de l'étudiant supprimé
+            }
+        }
+        return "Etudiant non trouvé"; // Aucun étudiant trouvé
+    }
+}
